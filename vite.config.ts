@@ -10,4 +10,7 @@ export default defineConfig({
     setupFiles: './vitest.setup.ts'
   },
   plugins: [react()],
+  base: process.env.GITHUB_PAGES
+    ? 'FlashTodo'
+    : './'
 })
