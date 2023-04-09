@@ -1,4 +1,5 @@
-import { useState } from "react";
+import "./App.css"
+import { useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -9,7 +10,6 @@ import {
   Modal,
 } from "react-bootstrap";
 import { nanoid } from "nanoid";
-import "./App.css"
 
 type Task = {
   id: string;
@@ -20,8 +20,22 @@ function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskName, setNewTaskName] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
+  const [allDelete, setAllDelete] = useState(false);
   const [editTaskId, setEditTaskId] = useState("");
   const [editTaskName, setEditTaskName] = useState("");
+
+  // ローカルストレージからタスク一覧を読み込む
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+
+  // タスク一覧が変更されるたびにローカルストレージに保存する
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   function handleAddTask() {
     if (newTaskName !== "") {
@@ -56,42 +70,58 @@ function App() {
     setShowEditModal(false);
   }
 
+  function handleAllDelete() {
+    setAllDelete(false);
+  }
+  function ExecAllDelete() {
+    localStorage.clear();
+    setTasks([]);
+    setAllDelete(false);
+  }
+
+  function handleKeyDown(e: { key: string; }) {
+    if (e.key === 'Enter') {
+      handleAddTask();
+    }
+  }
+
   return (
     <Container>
       <Row>
         <Col>
-          <h1>Flash Todo</h1>
-          <h6>do now, for the future.</h6>
+          <h1 className="text-center">Flash Todo</h1>
+          <h6 className="text-center">do now, for the future.</h6>
           <Form className="d-flex flex-row">
             <Form.Control
               type="text"
               placeholder="What are you going to do?"
               value={newTaskName}
               onChange={(e) => setNewTaskName(e.target.value)}
+              onKeyDown={handleKeyDown}
             />&nbsp;
-            <Button onClick={handleAddTask}>
-              追加
+            <Button className="btn-sm text-nowrap" onClick={handleAddTask}>
+              追 加
             </Button>
           </Form>
           <br />
           <Table>
             <thead>
               <tr>
-                <th>タスクタイトル</th>
-                <th>コントロール</th>
+                <th className="text-center">タスクタイトル</th>
+                <th className="text-center">コントロール</th>
               </tr>
             </thead>
             <tbody>
               {tasks.map((task) => (
                 <tr key={task.id}>
                   <td valign="middle">{task.name}</td>
-                  <td valign="middle">
+                  <td valign="middle" className="text-center">
                     <Button
                       onClick={() => handleEditClick(task.id, task.name)}
                     >
                       編集
                     </Button>
-                    &nbsp;
+                    &emsp;
                     <Button
                       onClick={() => handleDeleteTask(task.id)}
                       variant="danger"
@@ -105,30 +135,70 @@ function App() {
           </Table>
         </Col>
       </Row>
+
+
+      <Row>
+        <Col>
+          {/* ここに他のコンポーネント配置が可能 */}
+        </Col>
+        <Col xs="auto">
+          <Button
+            onClick={() => setAllDelete(true)}
+            variant="danger"
+            className="btn btn-sm"
+          >
+            全て削除
+          </Button>
+        </Col>
+      </Row>
+
+      <Modal show={allDelete} onHide={handleAllDelete}>
+        <div id="delWiz">
+          <Modal.Header>
+            <Modal.Title>
+              全てのタスクを削除しますか？
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Footer>
+            <Button onClick={() => setAllDelete(false)}>
+              キャンセル
+            </Button>
+            <Button
+              onClick={ExecAllDelete}
+              variant="danger"
+            >
+              削除
+            </Button>
+          </Modal.Footer>
+        </div>
+      </Modal>
+
       <Modal show={showEditModal} onHide={handleEditModalCancel}>
-        <Modal.Header>
-          <Modal.Title>
-            タスクを編集中
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Label>タスク名を変更できます</Form.Label>
-          <Form>
-            <Form.Control
-              type="text"
-              value={editTaskName}
-              onChange={(e) => setEditTaskName(e.target.value)}
-            />
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleEditModalCancel}>
-            キャンセル
-          </Button>
-          <Button onClick={handleEditModalSave}>
-            保存
-          </Button>
-        </Modal.Footer>
+        <div id="editWiz">
+          <Modal.Header>
+            <Modal.Title>
+              タスクを編集中
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Label>タスク名を変更できます</Form.Label>
+            <Form>
+              <Form.Control
+                type="text"
+                value={editTaskName}
+                onChange={(e) => setEditTaskName(e.target.value)}
+              />
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={handleEditModalCancel}>
+              キャンセル
+            </Button>
+            <Button onClick={handleEditModalSave} variant="success">
+              保存
+            </Button>
+          </Modal.Footer>
+        </div>
       </Modal>
     </Container >
   );

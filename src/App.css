@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&display=swap');
 
 @media (prefers-color-scheme: dark) {
-  body {
+  body, #delWiz, #editWiz {
     background: #1d1d1d;
     color: #ffffff;
   }
