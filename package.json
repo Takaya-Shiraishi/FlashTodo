@@ -8,7 +8,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
@@ -17,7 +19,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "react-scripts": "^5.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.0.28",
@@ -27,11 +28,13 @@
     "@vitest/ui": "^0.29.8",
     "eslint-plugin-jest-dom": "^4.0.3",
     "eslint-plugin-testing-library": "^5.10.2",
+    "gh-pages": "^5.0.0",
     "happy-dom": "^9.1.9",
     "jsdom": "^21.1.1",
+    "react-scripts": "^5.0.1",
     "typescript": "^4.9.3",
     "vite": "^4.2.0",
     "vitest": "^0.29.8"
   },
-  "homepage": "takaya-shiraishi.github.io/FlashTodo/"
+  "homepage": "https://takaya-shiraishi.github.io/FlashTodo/"
 }
