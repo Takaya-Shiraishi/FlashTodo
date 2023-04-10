@@ -10,7 +10,7 @@
 |:-:|:-:|
 |環境|vite|
 |ライブラリ|React|
-|使用言語|TypeScript|
+|言語|TypeScript|
 |CSS|Bootstrap|
 |CI/CD|GitHub Actions|
 |デプロイ|GitHub Pages|
