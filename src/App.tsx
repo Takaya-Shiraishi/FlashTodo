@@ -114,7 +114,7 @@ function App() {
             <tbody>
               {tasks.map((task) => (
                 <tr key={task.id}>
-                  <td valign="middle">{task.name}</td>
+                  <td valign="middle" className="text-center">{task.name}</td>
                   <td valign="middle" className="text-center">
                     <Button
                       onClick={() => handleEditClick(task.id, task.name)}
