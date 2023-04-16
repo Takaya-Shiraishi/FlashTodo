@@ -8,7 +8,7 @@
 ## 技術要件
 |各種技術|使用したもの|
 |:-:|:-:|
-|環境|vite|
+|ビルドツール|vite|
 |ライブラリ|React|
 |言語|TypeScript|
 |CSS|Bootstrap|
